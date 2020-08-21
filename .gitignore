@@ -1,0 +1,6 @@
+.stack-work/
+*~
+.*.swp
+/b2hs.cabal
+/stack.yaml
+/stack.yaml.lock

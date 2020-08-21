@@ -1,0 +1,72 @@
+name:                b2hs
+version:             0.1.0.0
+github:              "phlummox/b2hs"
+license:             BSD2
+author:              phlummox
+maintainer:          b2hs-maintainer@phlummox.dev
+copyright:           "2020 phlummox"
+synopsis:            library for backblaze b2 uploads and downloads
+description:         See README at <https://github.com/phlummox/b2hs#readme>
+category:            Web
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- base16-bytestring
+- bytestring
+- containers
+- cryptohash-sha1
+- filepath
+- http-types
+#- lens-aeson
+- microlens
+- microlens-platform
+- mtl
+- text
+- wreq
+
+ghc-options:
+    -Wall
+    -fwarn-tabs
+
+when:
+  - condition: impl(ghc >= 8.0)
+    ghc-options:        -Wredundant-constraints
+                        -Wno-type-defaults
+                        -Wcompat
+                        -Widentities
+                        -Wincomplete-record-updates
+                        -Wincomplete-uni-patterns
+                        -Wno-name-shadowing
+                        -Wextra
+
+  - condition: impl(ghc >= 8.2)
+    ghc-options:        -fhide-source-paths
+
+  - condition: impl(ghc >= 8.4)
+    ghc-options:        -Wmissing-export-lists
+                        -Wpartial-fields
+
+  - condition: impl(ghc >= 8.8)
+    ghc-options:        -Wmissing-deriving-strategies
+
+library:
+  source-dirs: src
+
+executables:
+  b2hs:
+    main:                b2hs.hs
+    source-dirs:         .
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - b2hs
+    - optparse-applicative
+    #- MissingH  - use to guess mime types
+
