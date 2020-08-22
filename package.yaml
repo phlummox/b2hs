@@ -12,6 +12,7 @@ category:            Web
 extra-source-files:
 - README.md
 - ChangeLog.md
+- stack-lts-13.yaml
 
 flags:
   staticbuild:
@@ -26,12 +27,10 @@ dependencies:
 - bytestring
 - containers
 - cryptohash-sha1
-- filepath
 - http-types
-#- lens-aeson
 - microlens
 - microlens-platform
-- mtl
+# - mtl
 - text
 - wreq
 
@@ -73,13 +72,19 @@ library:
 executables:
   b2hs:
     main:                b2hs.hs
-    source-dirs:         .
+    source-dirs:         app
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
     - b2hs
+    - ansi-wl-pprint
+    - filepath
+    - git-embed
     - optparse-applicative
+    - template-haskell
+    - time
+
     #- MissingH  - use to guess mime types
 
