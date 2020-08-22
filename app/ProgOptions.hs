@@ -102,14 +102,14 @@ commandParse :: Parser Command
 commandParse = subparser
           (
           command "download"
-              (info (undefined <**> helper)
+              (info (dlOpts <**> helper)
                     (progDesc "download a file"
                     <>
                     footerDoc (Just credentialsDoc)
                     ))
           <>
           command "upload"
-              (info (undefined <**> helper)
+              (info (ulOpts <**> helper)
                     (progDesc "upload a file"
                     <>
                     footerDoc (Just credentialsDoc)
