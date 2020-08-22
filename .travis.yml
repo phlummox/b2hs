@@ -1,0 +1,91 @@
+
+language: c
+os: linux
+
+git:
+  depth: 5
+
+cache:
+  directories:
+  - "$HOME/.stack"
+
+services:
+  - docker
+
+before_install:
+# Using compiler above sets CC to an invalid value, so unset it
+- unset CC
+- |
+  echo "make any required dirs"
+  set -ex
+
+  mkdir -p ~/.local/bin
+  mkdir -p ~/.stack
+
+  set +ex
+
+
+script:
+- |
+  printf '\n***script: do build and test***\n'
+
+- |
+  set -ex
+
+  cp stack-lts-13.yaml stack.yaml
+
+  IMG=phlummox/alpine-haskell-stack:latest@sha256:cc0d886b99295eb96e3fc4b406b94e08b4d303a375c721a3bb482331cb3f6fc1
+  docker pull $IMG
+
+  # for docker
+  CACHE_MOUNT_OPTS="-v $HOME/.stack:/home/user/.stack"
+
+  docker run --rm \
+    -v $PWD:/work  \
+    ${CACHE_MOUNT_OPTS} \
+    --workdir /work \
+    $IMG sh -c ./docker_build_script.sh
+
+  # ensure cached files are readable by current
+  # user
+  user=`id -u -n`
+  group=`id -g -n`
+  sudo chown -R $user:$group .
+  sudo chown -R $user:$group ~/.stack
+
+  set +ex
+
+# NB: when creating api keys using the 'travis'
+# command-line tool:
+# Most of the online docco is out of date.
+# If the build is on travis-ci.com (not travis-ci.org),
+# you need:
+#    travis login --pro
+#    travis setup releases --force --pro
+# to get a key.
+# If on travis-ci.org, you don't need "--pro".
+deploy:
+  provider: releases
+
+  # travis lint warns skip_cleanup is deprecated,
+  # but in fact is still necessary w/ the version
+  # of dpl (https://github.com/travis-ci/dpl/blob/v1/README.md)
+  # used on travis
+  skip_cleanup: true
+  file_glob: true
+
+  api_key:
+    secure: OhOi+hf3zOdCoN1pJoHRDo2510FH/Sqvb5lNdMC2k+1R0zuAUDNK3KqmMHMNFMhQQ34NDwlf3foEnntmLCsMnQ9osHYLnVMrishr4DItSZMtmdTRnqW8bHnpSqnYH4Y4iaALEUHZDVzUaSjDQ/Jeek0uXkvMFOEZof5AAQ3E8v+zE3gN8bP+mZ7MWU3FE9kDfa5FpXSbB88WFdVRTnwtcFZte9A/kas0x/fHwUAtzZqEOQAXlt/00Dag63nIQKqg1ESEABmCGEgYAcqaynIu3TGSpg/9AtSoN5FUic0oOlaUYaYLwq3n03lhI5kPjRlFdEgOe+P6rNacs2XICXHsEs160JoZWrrU0HgX+ZyVUoysHA5qh3LnVRz615lxhgCW6IPz53PUFROanhDo7U6kzVNIe6x6vIYBpAyqKr019drWj5GFvmZg6iOqZ+ZdRRfVZ+mKg0AiWH2JFoG8FMgsqTF6rN8uQwrBcOHaEKjBTPD4Lj2o7qDhN7/y5U49bjo/x9eROEkoyMZSQi9f/Y+k2kv32CoCdSU4aqFezpJwkyuS2AjWr1rBN5jPKRVdbBtyliFDW42ZTeVYwjXLaBBL8jpS6COvnd57EyC1NvDd8Z6f1Kxw69QuS7LSfYGw9s0WCiLwtc7MPdrRD/5RkfaOEPqm13g0uhuhLH8qVUM6t58=
+  file: "b2hs*gz"
+
+  on:
+    repo: phlummox/b2hs
+    branch: master
+    tags: true
+
+#  on:
+#    tags: true
+#    all_branches: true
+#    condition: $RELEASE = true
+
+
