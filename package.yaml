@@ -30,7 +30,6 @@ dependencies:
 - http-types
 - microlens
 - microlens-platform
-# - mtl
 - text
 - wreq
 
