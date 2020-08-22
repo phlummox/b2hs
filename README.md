@@ -6,7 +6,7 @@ and downloads.
 See `b2hs.hs` for sample use of the library.
 
 Static Linux x86\_64 executables available from
-the "[releases](releases)" page.
+the "[releases](https://github.com/phlummox/b2hs/releases)" page.
 
 ## Status
 
