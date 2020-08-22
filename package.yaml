@@ -4,10 +4,11 @@ github:              "phlummox/b2hs"
 license:             BSD2
 author:              phlummox
 maintainer:          b2hs-maintainer@phlummox.dev
-copyright:           "2020 phlummox"
+copyright:           2020 phlummox
 synopsis:            library for backblaze b2 uploads and downloads
 description:         See README at <https://github.com/phlummox/b2hs#readme>
-category:            Web
+category:            Web, Network, CLI
+tested-with:         GHC==8.6.5
 
 extra-source-files:
 - README.md
